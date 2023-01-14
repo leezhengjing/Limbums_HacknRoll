@@ -9,20 +9,4 @@ if __name__ == '__main__':
 # configure_uploads(app, photos)
 
 
-# class LoginForm(FlaskForm):
-#     email = StringField(label='email',
-#                         validators=[DataRequired(), Email(), Length(min=8, message="Email is not long enough!")])
-#     password = PasswordField(label='password', validators=[DataRequired()])
-#     submit = SubmitField(label="Log In")
-#
-#
-# class UploadForm(FlaskForm):
-#     photo = FileField(
-#         validators=[
-#             FileAllowed(photos, "Only images are allowed"),
-#             FileRequired("File field should not be empty")
-#         ]
-#     )
-#     submit = SubmitField("Upload")
-
 

@@ -2,7 +2,7 @@ from market import app
 from flask import render_template
 from market.models import Products
 from market import db
-# from market import LoginForm, UploadForm
+from market.forms import RegisterForm, LoginForm
 
 
 @app.route("/")
@@ -19,32 +19,30 @@ def details():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    return "hello world"
-    # login_form = LoginForm()
-    # if login_form.validate_on_submit():
-    #     if login_form.email.data == "admin@email.com" and login_form.password.data == "12345678":
-    #         return render_template("success.html")
-    #     else:
-    #         return render_template("denied.html")
-    # else:
-    #     return render_template("login.html", form=login_form)
+    login_form = LoginForm()
+    if login_form.validate_on_submit():
+        if login_form.email.data == "admin@email.com" and login_form.password.data == "12345678":
+            return render_template("success.html")
+        else:
+            return render_template("denied.html")
+    else:
+        return render_template("login.html", form=login_form)
 
 
 # Work in progress
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    return "hello world"
 
-# register_form = RegisterForm()
-# login_form = LoginForm()
-#
-# if register_form.validate_on_submit():
-#     email = register_form.email.data
-#     password = register_form.password.data
-#
-#     return render_template("login.html", form=login_form)
-# else:
-#     return render_template("register.html", form=register_form)
+    register_form = RegisterForm()
+    login_form = LoginForm()
+
+    if register_form.validate_on_submit():
+        email = register_form.email_address.data
+        password = register_form.password1.data
+
+        return render_template("login.html", form=login_form)
+    else:
+        return render_template("register.html", form=register_form)
 
 
 @app.route("/listings", methods=["GET", "POST"])
@@ -62,13 +60,13 @@ def get_file(filename):
 
 @app.route("/sell", methods=["GET", "POST"])
 def sell():
-# upload_form = UploadForm()
-#
-# if upload_form.validate_on_submit():
-#     filename = photos.save(upload_form.photo.data)
-#     file_url = url_for('get_file', filename=filename)
-# else:
-#     file_url = None
-#
-    # return render_template("sell.html", form=upload_form, file_url=file_url)
+    # upload_form = UploadForm()
+    #
+    # if upload_form.validate_on_submit():
+    #     filename = photos.save(upload_form.photo.data)
+    #     file_url = url_for('get_file', filename=filename)
+    # else:
+    #     file_url = None
+    #
+    #     return render_template("sell.html", form=upload_form, file_url=file_url)
     return "hello world"

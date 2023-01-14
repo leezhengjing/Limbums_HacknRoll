@@ -1,6 +1,6 @@
 from market import app
 from flask import render_template, redirect, url_for
-from market.models import Product
+from market.models import Product, User
 from market import db
 from market.forms import RegisterForm, LoginForm, CreatePostForm
 from datetime import date
@@ -36,9 +36,16 @@ def register():
     register_form = RegisterForm()
 
     if register_form.validate_on_submit():
+        username = register_form.username.data
         email = register_form.email_address.data
         password = register_form.password1.data
-        print("hi")
+        user = User(
+            username = username,
+            email_address = email,
+            password_hash = password
+        )
+        db.session.add(user)
+        db.session.commit()
         return redirect(url_for("login"))
 
     return render_template("register.html", form=register_form)

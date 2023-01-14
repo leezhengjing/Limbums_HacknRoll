@@ -7,8 +7,12 @@
 
 <!-- Header-->
 {% block main %}
-<div class="container">
-	<h1>Register</h1>
-	{{ wtf.quick_form(form, novalidate=True) }}
-</div>
+<body>
+	<div class="container">
+		<h1 class="h3 mb-3 font-weight-normal">
+			Please create your account
+		</h1>
+		{{ wtf.quick_form(form, novalidate=True) }}
+	</div>
+</body>
 {% endblock %}

@@ -16,8 +16,5 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///products.db"
 db.init_app(app)
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
 
-with app.app_context():
-    db.create_all()
-
 
 from market import routes

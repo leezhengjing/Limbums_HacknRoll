@@ -1,15 +1,37 @@
 from market import app
-from flask import render_template, redirect, url_for, flash
+from flask import redirect, url_for, flash
 from market.models import Product, User
+from flask import render_template, request, Response
 from market import db
 from market.forms import RegisterForm, LoginForm, CreatePostForm
 from datetime import date
 
+from bot import tel_send_image, tel_send_message, tel_parse_message
 
-@app.route("/")
+
+@app.route("/", methods=['GET', 'POST'])
 def index():
-    products = db.session.execute(db.select(Product).order_by(Product.name)).scalars()
-    return render_template("index.html", products=products)
+    if request.method == "POST":
+        print("Hello")
+        msg = request.get_json()
+        try:
+            chat_id, txt = tel_parse_message(msg)
+            if txt == "good am":
+                tel_send_message(chat_id, "Good am!")
+            elif txt == "products":
+                products = db.session.execute(db.select(Product).order_by(Product.name)).scalars()
+                tel_send_message(chat_id, str(products))
+            else:
+                tel_send_image(chat_id)
+        except:
+            print("from index-->")
+
+        return Response('ok', status=200)
+    else:
+        products = db.session.execute(db.select(Product).order_by(Product.name)).scalars()
+        return render_template("index.html", products=products)
+
+    # https://api.telegram.org/bot5972375728:AAHGXbdkAqdmIGGbOul6Ds4BrJQMqOISRRY/setWebhook?url=xs-2.opensvr.net
 
 
 @app.route("/details")
@@ -40,9 +62,9 @@ def register():
         email = register_form.email_address.data
         password = register_form.password1.data
         user = User(
-            username = username,
-            email_address = email,
-            password_hash = password
+            username=username,
+            email_address=email,
+            password_hash=password
         )
         db.session.add(user)
         db.session.commit()

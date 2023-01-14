@@ -47,7 +47,8 @@ def register():
 
 @app.route("/listings", methods=["GET", "POST"])
 def listings():
-    return render_template("listings.html")
+    products = db.session.execute(db.select(Products).order_by(Products.title)).scalars()
+    return render_template("listings.html", products=products)
 
 
 # Getting filename from url

@@ -8,7 +8,7 @@ class RegisterForm(FlaskForm):
     email_address = StringField(label='email')
     password1 = PasswordField(label='password1')
     password2 = PasswordField(label='password2')
-    submit = SubmitField(label='submit')
+    submit = SubmitField(label='submit', render_kw={'style': 'background-color: #42ADF4; color: white;'})
 
 class LoginForm(FlaskForm):
     email = StringField(label='email',

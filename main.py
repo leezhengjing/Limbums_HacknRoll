@@ -13,6 +13,11 @@ class LoginForm(FlaskForm):
     password = PasswordField(label='password', validators=[DataRequired()])
     submit = SubmitField(label="Log In")
 
+class RegisterForm(FlaskForm):
+    email = StringField(label='email', validators=[DataRequired(), Email(), Length(min=8, message="Email is not long enough!")])
+    password = PasswordField(label='password', validators=[DataRequired()])
+    submit = SubmitField(label="Log In")
+
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -26,13 +31,32 @@ def details():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     login_form = LoginForm()
+
+    test_email = "admin@email.com"
+    test_pass = "12345678"
+
+    # Validate data
     if login_form.validate_on_submit():
-        if login_form.email.data == "admin@email.com" and login_form.password.data == "12345678":
-            return render_template("success.html")
+        if login_form.email.data != test_email or login_form.password.data != test_pass:
+            return render_template("login.html", form=login_form)
         else:
-            return render_template("denied.html")
+            return render_template("index.html")
     else:
         return render_template("login.html", form=login_form)
+
+# Work in progress
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    register_form = RegisterForm()
+    login_form = LoginForm()
+
+    if register_form.validate_on_submit():
+        email = register_form.email.data
+        password = register_form.password.data
+
+        return render_template("login.html", form=login_form)
+    else:
+        return render_template("register.html", form=register_form)
 
 if __name__ == "__main__":
     app.run(debug=True)

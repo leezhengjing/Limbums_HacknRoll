@@ -14,7 +14,7 @@ class LoginForm(FlaskForm):
     email = StringField(label='email',
                         validators=[DataRequired(), Email(), Length(min=8, message="Email is not long enough!")])
     password = PasswordField(label='password', validators=[DataRequired()])
-    submit = SubmitField(label="Log In")
+    submit = SubmitField(label="Log In", render_kw={'style': 'background-color: #42ADF4; color: white;'})
 #
 #
 # class UploadForm(FlaskForm):

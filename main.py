@@ -16,6 +16,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///products.db"
 # initialize the app with the extension
 db.init_app(app)
 
+
 class Products(db.Model):
     __tablename__ = "products"
     id = db.Column(db.Integer, primary_key=True)
@@ -27,25 +28,29 @@ class Products(db.Model):
     img_url = db.Column(db.String(250), nullable=False)
     price = db.Column(db.Integer, nullable=False)
 
+
 with app.app_context():
     db.create_all()
 
 
 class LoginForm(FlaskForm):
-    email = StringField(label='email', validators=[DataRequired(), Email(), Length(min=8, message="Email is not long enough!")])
+    email = StringField(label='email',
+                        validators=[DataRequired(), Email(), Length(min=8, message="Email is not long enough!")])
     password = PasswordField(label='password', validators=[DataRequired()])
     submit = SubmitField(label="Log In")
+
 
 @app.route("/")
 def index():
     products = db.session.execute(db.select(Products).order_by(Products.title)).scalars()
     return render_template("index.html", products=products)
 
+
 @app.route("/details")
 def details():
-
     # Get data to hydrate the page
     return render_template("details.html")
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -57,6 +62,7 @@ def login():
             return render_template("denied.html")
     else:
         return render_template("login.html", form=login_form)
+
 
 # Work in progress
 @app.route("/register", methods=["GET", "POST"])
@@ -72,13 +78,16 @@ def register():
     else:
         return render_template("register.html", form=register_form)
 
+
 @app.route("/listings", methods=["GET", "POST"])
 def listings():
-    return render_template("sell.html")
+    return render_template("listings.html")
+
 
 @app.route("/sell", methods=["GET", "POST"])
 def sell():
-    return render_template("listings.html")
+    return render_template("sell.html")
+
 
 if __name__ == "__main__":
     app.run(debug=True)

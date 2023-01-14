@@ -1,7 +1,11 @@
 from market import app
+from flask import render_template, redirect, url_for
+from market.models import Product, User
 from flask import render_template, request, Response
 from market.models import Products
 from market import db
+from market.forms import RegisterForm, LoginForm, CreatePostForm
+from datetime import date
 from market.forms import RegisterForm, LoginForm
 
 from bot import tel_send_image, tel_send_message, tel_parse_message
@@ -54,20 +58,26 @@ def login():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     register_form = RegisterForm()
-    login_form = LoginForm()
 
     if register_form.validate_on_submit():
+        username = register_form.username.data
         email = register_form.email_address.data
         password = register_form.password1.data
+        user = User(
+            username = username,
+            email_address = email,
+            password_hash = password
+        )
+        db.session.add(user)
+        db.session.commit()
+        return redirect(url_for("login"))
 
-        return render_template("login.html", form=login_form)
-    else:
-        return render_template("register.html", form=register_form)
+    return render_template("register.html", form=register_form)
 
 
 @app.route("/listings", methods=["GET", "POST"])
 def listings():
-    products = db.session.execute(db.select(Products).order_by(Products.title)).scalars()
+    products = db.session.execute(db.select(Product).order_by(Product.name)).scalars()
     return render_template("listings.html", products=products)
 
 
@@ -82,13 +92,21 @@ def get_file(filename):
 
 @app.route("/sell", methods=["GET", "POST"])
 def sell():
-    # upload_form = UploadForm()
-    #
-    # if upload_form.validate_on_submit():
-    #     filename = photos.save(upload_form.photo.data)
-    #     file_url = url_for('get_file', filename=filename)
-    # else:
-    #     file_url = None
-    #
-    #     return render_template("sell.html", form=upload_form, file_url=file_url)
-    return "hello world"
+    form = CreatePostForm()
+    if form.validate_on_submit():
+        new_post = Products(
+            title=form.title.data,
+            tags=form.tags.data,
+            body=form.body.data,
+            img_url=form.img_url.data,
+            author=form.author.data,
+            date=date.today().strftime("%B %d, %Y")
+        )
+        db.session.add(new_post)
+        db.session.commit()
+        return redirect(url_for("listings"))
+    if form.errors != {}:
+        for err_msg in form.error.values():
+            print(f"There was an error with creating a user: {err_msg}")
+
+    return render_template("sell.html", form=form)

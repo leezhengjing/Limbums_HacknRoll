@@ -1,13 +1,14 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import DataRequired, Length, Email
+from wtforms.validators import DataRequired, Length, Email, URL, EqualTo
 from flask_wtf.file import FileField, FileRequired, FileAllowed
+from flask_ckeditor import CKEditor, CKEditorField
 
 class RegisterForm(FlaskForm):
-    username = StringField(label='username')
-    email_address = StringField(label='email')
-    password1 = PasswordField(label='password1')
-    password2 = PasswordField(label='password2')
+    username = StringField(label='username', validators=[Length(min=2, max=30), DataRequired()])
+    email_address = StringField(label='email', validators=[Email(), DataRequired()])
+    password1 = PasswordField(label='password1', validators=[Length(min=6), DataRequired()])
+    password2 = PasswordField(label='password2', validators=[EqualTo('password1')])
     submit = SubmitField(label='submit')
 
 class LoginForm(FlaskForm):
@@ -15,6 +16,14 @@ class LoginForm(FlaskForm):
                         validators=[DataRequired(), Email(), Length(min=8, message="Email is not long enough!")])
     password = PasswordField(label='password', validators=[DataRequired()])
     submit = SubmitField(label="Log In")
+
+class CreatePostForm(FlaskForm):
+    title = StringField("Name of Product", validators=[DataRequired()])
+    tags = StringField("Tags", validators=[DataRequired()])
+    author = StringField("Your Name", validators=[DataRequired()])
+    img_url = StringField("Image URL", validators=[DataRequired(), URL()])
+    body = CKEditorField("Item Description", validators=[DataRequired()])
+    submit = SubmitField("Submit Post")
 #
 #
 # class UploadForm(FlaskForm):

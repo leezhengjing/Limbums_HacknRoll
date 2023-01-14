@@ -18,11 +18,10 @@ class LoginForm(FlaskForm):
     submit = SubmitField(label="Log In")
 
 class CreatePostForm(FlaskForm):
-    title = StringField("Name of Product", validators=[DataRequired()])
-    tags = StringField("Tags", validators=[DataRequired()])
-    author = StringField("Your Name", validators=[DataRequired()])
-    img_url = StringField("Image URL", validators=[DataRequired(), URL()])
-    body = CKEditorField("Item Description", validators=[DataRequired()])
+    name = StringField("Name of Product", validators=[DataRequired()])
+    price = StringField("Price", validators=[DataRequired()])
+    img_url = StringField("Image URL", validators=[DataRequired()])
+    description = CKEditorField("Item Description", validators=[DataRequired()])
     submit = SubmitField("Submit Post")
 #
 #

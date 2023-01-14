@@ -1,5 +1,5 @@
 from market import app
-from flask import render_template, redirect, url_for
+from flask import render_template, redirect, url_for, flash
 from market.models import Product, User
 from market import db
 from market.forms import RegisterForm, LoginForm, CreatePostForm
@@ -70,19 +70,18 @@ def get_file(filename):
 def sell():
     form = CreatePostForm()
     if form.validate_on_submit():
-        new_post = Products(
-            title=form.title.data,
-            tags=form.tags.data,
-            body=form.body.data,
+        new_post = Product(
+            name=form.name.data,
+            price=form.price.data,
+            description=form.description.data,
             img_url=form.img_url.data,
-            author=form.author.data,
             date=date.today().strftime("%B %d, %Y")
         )
         db.session.add(new_post)
         db.session.commit()
         return redirect(url_for("listings"))
     if form.errors != {}:
-        for err_msg in form.error.values():
-            print(f"There was an error with creating a user: {err_msg}")
+        for err_msg in form.errors.values():
+            flash(f"There was an error with creating a user: {err_msg}")
 
     return render_template("sell.html", form=form)

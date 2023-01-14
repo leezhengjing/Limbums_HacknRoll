@@ -1,12 +1,10 @@
 from market import app
-from flask import render_template, redirect, url_for, flash
+from flask import redirect, url_for, flash
 from market.models import Product, User
 from flask import render_template, request, Response
-from market.models import Products
 from market import db
 from market.forms import RegisterForm, LoginForm, CreatePostForm
 from datetime import date
-from market.forms import RegisterForm, LoginForm
 
 from bot import tel_send_image, tel_send_message, tel_parse_message
 
@@ -21,7 +19,7 @@ def index():
             if txt == "good am":
                 tel_send_message(chat_id, "Good am!")
             elif txt == "products":
-                products = db.session.execute(db.select(Products).order_by(Products.title)).scalars()
+                products = db.session.execute(db.select(Product).order_by(Product.name)).scalars()
                 tel_send_message(chat_id, str(products))
             else:
                 tel_send_image(chat_id)
@@ -30,7 +28,7 @@ def index():
 
         return Response('ok', status=200)
     else:
-        products = db.session.execute(db.select(Products).order_by(Products.title)).scalars()
+        products = db.session.execute(db.select(Product).order_by(Product.name)).scalars()
         return render_template("index.html", products=products)
 
     # https://api.telegram.org/bot5972375728:AAHGXbdkAqdmIGGbOul6Ds4BrJQMqOISRRY/setWebhook?url=xs-2.opensvr.net
@@ -64,9 +62,9 @@ def register():
         email = register_form.email_address.data
         password = register_form.password1.data
         user = User(
-            username = username,
-            email_address = email,
-            password_hash = password
+            username=username,
+            email_address=email,
+            password_hash=password
         )
         db.session.add(user)
         db.session.commit()

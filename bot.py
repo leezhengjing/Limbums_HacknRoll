@@ -9,15 +9,15 @@ logging.basicConfig(
     level=logging.INFO
 )
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def good_am(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(chat_id=update.effective_chat.id, text="Good am!")
-    await context.bot.send_document(chat_id=update.effective_chat.id, document=open('images/meme1.jpg', 'rb'))
+    await context.bot.send_photo(chat_id=update.effective_chat.id, photo=open('images/meme1.jpg', 'rb'))
 
 
 if __name__ == '__main__':
     application = ApplicationBuilder().token(token).build()
 
-    start_handler = CommandHandler('good_am', start)
+    start_handler = CommandHandler('good_am', good_am)
     application.add_handler(start_handler)
 
     application.run_polling()

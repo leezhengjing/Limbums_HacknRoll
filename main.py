@@ -38,7 +38,8 @@ class LoginForm(FlaskForm):
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    products = db.session.execute(db.select(Products).order_by(Products.title)).scalars()
+    return render_template("index.html", products=products)
 
 @app.route("/details")
 def details():

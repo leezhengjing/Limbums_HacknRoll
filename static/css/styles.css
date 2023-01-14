@@ -11286,3 +11286,13 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+
+.card:hover {
+  background-color: #c0d6e4;
+  border-color: black;
+}
+
+body {
+  background-color: #89e3cc;
+}
+

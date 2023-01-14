@@ -20,15 +20,7 @@ def index():
 @app.route("/details")
 def details():
 
-    # if request.method == "POST":
-    #     job_type = request.form.get("job_type")
-    #     requirement = request.form.get("requirement")
-    #     job_sector = request.form.get("job_sector")
-    #     pay = request.form.get("pay")
-    #     desc = request.form.get("desc")
-    #
-    #     return redirect ("/")
-    # else:
+    # Get data to hydrate the page
     return render_template("details.html")
 
 @app.route("/login", methods=["GET", "POST"])

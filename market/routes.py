@@ -1,14 +1,35 @@
 from market import app
-from flask import render_template
+from flask import render_template, request, Response
 from market.models import Products
 from market import db
 from market.forms import RegisterForm, LoginForm
 
+from bot import tel_send_image, tel_send_message, tel_parse_message
 
-@app.route("/")
+
+@app.route("/", methods=['GET', 'POST'])
 def index():
-    products = db.session.execute(db.select(Products).order_by(Products.title)).scalars()
-    return render_template("index.html", products=products)
+    if request.method == "POST":
+        print("Hello")
+        msg = request.get_json()
+        try:
+            chat_id, txt = tel_parse_message(msg)
+            if txt == "good am":
+                tel_send_message(chat_id, "Good am!")
+            elif txt == "products":
+                products = db.session.execute(db.select(Products).order_by(Products.title)).scalars()
+                tel_send_message(chat_id, str(products))
+            else:
+                tel_send_image(chat_id)
+        except:
+            print("from index-->")
+
+        return Response('ok', status=200)
+    else:
+        products = db.session.execute(db.select(Products).order_by(Products.title)).scalars()
+        return render_template("index.html", products=products)
+
+    # https://api.telegram.org/bot5972375728:AAHGXbdkAqdmIGGbOul6Ds4BrJQMqOISRRY/setWebhook?url=xs-2.opensvr.net
 
 
 @app.route("/details")
@@ -32,7 +53,6 @@ def login():
 # Work in progress
 @app.route("/register", methods=["GET", "POST"])
 def register():
-
     register_form = RegisterForm()
     login_form = LoginForm()
 
@@ -55,6 +75,7 @@ def listings():
 @app.route('/sell/<filename>')
 def get_file(filename):
     return "hello world"
+
 
 # return send_from_directory(app.config['UPLOADED_PHOTOS_DEST'], filename)
 

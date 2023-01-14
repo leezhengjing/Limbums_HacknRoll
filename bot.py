@@ -1,29 +1,47 @@
-import logging
 import os
-from telegram import Update, InputFile
-from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler
 import random
 
-path = 'market/images/'
-files = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
+import requests
 
-token = '5972375728:AAHGXbdkAqdmIGGbOul6Ds4BrJQMqOISRRY'
-
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.INFO
-)
-
-async def good_am(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await context.bot.send_message(chat_id=update.effective_chat.id, text="Good am!")
-    random_int = random.randint(0, len(files) - 1)
-    await context.bot.send_photo(chat_id=update.effective_chat.id, photo=open(f'market/images/{files[random_int]}', 'rb'))
+TOKEN = '5972375728:AAHGXbdkAqdmIGGbOul6Ds4BrJQMqOISRRY'
 
 
-if __name__ == '__main__':
-    application = ApplicationBuilder().token(token).build()
+def tel_parse_message(message):
+    print("message:", message)
+    try:
+        chat_id = message['message']['chat']['id']
+        txt = message['message']['text']
+        print("chat_id-->", chat_id)
+        print("txt-->", txt)
 
-    start_handler = CommandHandler('good_am', good_am)
-    application.add_handler(start_handler)
+        return chat_id, txt
+    except:
+        print("NO text found-->>")
 
-    application.run_polling()
+
+def tel_send_message(chat_id, text):
+    url = f'https://api.telegram.org/bot{TOKEN}/sendMessage'
+    print(url)
+    payload = {
+        'chat_id': chat_id,
+        'text': text
+    }
+
+    r = requests.post(url, json=payload)
+
+    return r
+
+
+def tel_send_image(chat_id):
+    url = f'https://api.telegram.org/bot{TOKEN}/sendPhoto'
+    files = os.listdir("market/images")
+    random_int = random.randint(o, len(files) - 1)
+
+    payload = {
+        'chat_id': chat_id,
+        'photo': "https://raw.githubusercontent.com/fbsamples/original-coast-clothing/main/public/styles/male-work.jpg",
+        'caption': "This is a sample image"
+    }
+
+    r = requests.post(url, json=payload)
+    return r

@@ -58,5 +58,13 @@ def register():
     else:
         return render_template("register.html", form=register_form)
 
+@app.route("/listings", methods=["GET", "POST"])
+def listings():
+    return render_template("sell.html")
+
+@app.route("/sell", methods=["GET", "POST"])
+def sell():
+    return render_template("listings.html")
+
 if __name__ == "__main__":
     app.run(debug=True)

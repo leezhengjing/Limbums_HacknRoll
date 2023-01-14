@@ -3,7 +3,7 @@ import random
 
 import requests
 
-TOKEN = '5972375728:AAHGXbdkAqdmIGGbOul6Ds4BrJQMqOISRRY'
+TOKEN = '5673183372:AAE6YDhzVkvWcSiBC5Dv9Xaf4ZRrVjdTkS8'
 
 
 def tel_parse_message(message):

@@ -31,7 +31,7 @@ def index():
         products = db.session.execute(db.select(Product).order_by(Product.name)).scalars()
         return render_template("index.html", products=products)
 
-    # https://api.telegram.org/bot5972375728:AAHGXbdkAqdmIGGbOul6Ds4BrJQMqOISRRY/setWebhook?url=xs-2.opensvr.net
+    # https://api.telegram.org/bot5673183372:AAE6YDhzVkvWcSiBC5Dv9Xaf4ZRrVjdTkS8/setWebhook?url=https://nusmarket.herokuapp.com/
 
 
 @app.route("/details")
@@ -62,9 +62,9 @@ def register():
         email = register_form.email_address.data
         password = register_form.password1.data
         user = User(
-            username=username,
-            email_address=email,
-            password_hash=password
+            username = username,
+            email_address = email,
+            password_hash = password
         )
         db.session.add(user)
         db.session.commit()

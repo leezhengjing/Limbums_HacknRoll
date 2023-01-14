@@ -2,11 +2,6 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
-'''
-setup_db(app)
-    binds a flask application and a SQLAlchemy service
-'''
-
 
 def setup_db(app):
     app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///products.db'
@@ -15,18 +10,18 @@ def setup_db(app):
     db.init_app(app)
 
 
-'''
-db_drop_and_create_all()
-    drops the database tables and starts fresh
-    can be used to initialize a clean database
-    !!NOTE you can change the database_filename variable to have multiple verisons of a database
-'''
-
-
 def db_drop_and_create_all(app):
     with app.app_context():
         db.drop_all()
         db.create_all()
+
+# class User(db.Model):
+#     id = db.Column(db.Integer(), primary_key=True)
+#     username = db.Column(db.String(length=30), nullable=False, unique=True)
+#     email_address = db.Column(db.String(length=50), nullable=False, unique=True)
+#     password_hash = db.Column(db.String(length=60), nullable=False)
+#     products = db.relationship('Products', backref='owned_user', lazy=True)
+
 
 
 class Products(db.Model):
@@ -43,3 +38,6 @@ class Products(db.Model):
     def __init__(self, title, body):
         self.name = title
         self.body = body
+
+# with app.app_context():
+#     db.create_all()

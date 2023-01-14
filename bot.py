@@ -11,7 +11,7 @@ logging.basicConfig(
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(chat_id=update.effective_chat.id, text="Good am!")
-    await context.bot.send_document(chat_id=update.effective_chat.id, document=open('images/meme1.jpg', 'rb'))
+    await context.bot.send_document(chat_id=update.effective_chat.id, document=open('market/images/meme1.jpg', 'rb'))
 
 
 if __name__ == '__main__':

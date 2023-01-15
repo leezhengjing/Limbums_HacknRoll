@@ -15,7 +15,11 @@ CKEditor(app)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///products.db"
 # initialize the app with the extension
 db.init_app(app)
-app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
+
+# to be configured at a later stage
+# app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
+
+app.config['SECRET_KEY'] = "randoz"
 
 
 from market import routes
